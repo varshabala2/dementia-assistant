@@ -1,38 +1,54 @@
 from flask import Flask, request, jsonify
-from pymongo import MongoClient
-from apscheduler.schedulers.background import BackgroundScheduler
-import datetime
+from flask_cors import CORS
+import openai
+from database import get_db
+from models import create_reminder, get_all_reminders, mark_reminder_completed
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
-# MongoDB connection
-uri = "your-connection-string"
-client = MongoClient(uri)
-db = client.get_database('your-database-name')
-collection = db.get_collection('your-collection-name')
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Scheduler setup
-scheduler = BackgroundScheduler()
-scheduler.start()
+#app routes
 
-# Function to send reminders
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "AI Companion Backend Running!"})
 
+#reminder routes
 
-def send_reminder(reminder):
-    # Implement logic to send reminder (e.g., email, push notification)
-    print(f"Reminder: {reminder}")
-
-
-@app.route('/api/medication-reminder', methods=['POST'])
+@app.route("/set_reminder", methods=["POST"])
 def set_reminder():
     data = request.json
-    reminder_time = datetime.datetime.strptime(
-        data['time'], '%Y-%m-%d %H:%M:%S')
-    scheduler.add_job(send_reminder, 'date',
-                      run_date=reminder_time, args=[data])
-    collection.insert_one(data)
-    return jsonify({"message": "Reminder set successfully!"}), 201
+    create_reminder(data["text"], data["time"])
+    return jsonify({"message": "Reminder Set!"})
 
+@app.route("/get_reminders", methods=["GET"])
+def get_reminders():
+    return jsonify(get_all_reminders())
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/complete_reminder", methods=["POST"])
+def complete_reminder():
+    data = request.json
+    mark_reminder_completed(data["text"])
+    return jsonify({"message": "Reminder Completed!"})
+
+#ai routes
+
+@app.route("/chat_with_ai", methods=["POST"])
+def chat_with_ai():
+    data = request.json
+    user_message = data["message"]
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": user_message}]
+    )
+
+    ai_response = response["choices"][0]["message"]["content"]
+    return jsonify({"reply": ai_response})
+
