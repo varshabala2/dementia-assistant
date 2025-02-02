@@ -1,0 +1,36 @@
+.navbar {
+    background-color: #f5deb3;
+    /* Light Wheat color */
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    /* Ensure full width */
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    /* Prevents unwanted padding issues */
+    z-index: 1000;
+    /* Keeps navbar above other elements */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding-right: 20px;
+    /* Prevents links from touching the edge */
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.nav-links li a:hover {
+    color: #333;
+}
