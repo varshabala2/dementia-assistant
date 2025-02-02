@@ -1,0 +1,77 @@
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import './MedicationForm.css'; // Import the CSS file
+import React from 'react';
+
+const MedicationForm = () => {
+    return (
+        <div>
+            <h2>Hello, World!</h2>
+        </div>
+    );
+};
+
+export default MedicationForm;
+
+
+
+// const MedicationForm = () => {
+//     const [medication, setMedication] = useState('');
+//     const [time, setTime] = useState('');
+//     const [dosage, setDosage] = useState('');
+
+//     const handleSubmit = async (event) => {
+//         event.preventDefault();
+
+//         const medicationDetails = {
+//             medication,
+//             time,
+//             dosage,
+//         };
+
+//         try {
+//             const response = await axios.post('http://localhost:5000/add_medication', medicationDetails);
+//             console.log('Medication added successfully:', response.data);
+//         } catch (error) {
+//             console.error('Error adding medication:', error);
+//         }
+//     };
+
+//     return (
+//         <div className="medication-form">
+//             <h2>Medication Reminder</h2>
+//             <form onSubmit={handleSubmit}>
+//                 <div className="form-group">
+//                     <label>Medication Name:</label>
+//                     <input
+//                         type="text"
+//                         value={medication}
+//                         onChange={(e) => setMedication(e.target.value)}
+//                         required
+//                     />
+//                 </div>
+//                 <div className="form-group">
+//                     <label>Time to Take:</label>
+//                     <input
+//                         type="time"
+//                         value={time}
+//                         onChange={(e) => setTime(e.target.value)}
+//                         required
+//                     />
+//                 </div>
+//                 <div className="form-group">
+//                     <label>Dosage:</label>
+//                     <input
+//                         type="text"
+//                         value={dosage}
+//                         onChange={(e) => setDosage(e.target.value)}
+//                         required
+//                     />
+//                 </div>
+//                 <button type="submit" className="submit-button">Add Medication</button>
+//             </form>
+//         </div>
+//     );
+// }
+
+// export default MedicationForm;
