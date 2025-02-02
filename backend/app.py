@@ -46,16 +46,21 @@ def complete_reminder():
 
 @app.route("/chat_with_ai", methods=["POST"])
 def chat_with_ai():
+    # data = request.json
+    # user_message = data["message"]
+
+    # response = openai.ChatCompletion.create(
+    #     model="gpt-4o",
+    #     messages=[{"role": "user", "content": user_message}]
+    # )
+
+    # ai_response = response["choices"][0]["message"]["content"]
+    # return jsonify({"reply": ai_response})
     data = request.json
     user_message = data["message"]
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": user_message}]
-    )
-
-    ai_response = response["choices"][0]["message"]["content"]
-    return jsonify({"reply": ai_response})
+    # Send back the same message for testing
+    return jsonify({"reply": user_message})
 
 # Test route
 

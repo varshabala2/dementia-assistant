@@ -1,42 +1,58 @@
-// Chatbot.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./Chatbot.css"; // Ensure you have the CSS file for styling
 
-const Chatbot = () => {
+const Chatbox = () => {
     const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState("");
 
-    const sendMessage = () => {
-        if (input.trim() !== '') {
-            setMessages([...messages, { text: input, sender: 'User' }]);
-            setInput('');
-            setTimeout(() => {
-                setMessages(prevMessages => [...prevMessages, { text: "I'm here to help!", sender: 'AI' }]);
-            }, 1000);
+    useEffect(() => {
+        // AI's initial greeting message
+        setMessages([{ sender: "ai", text: "Hi! I am Mnemo, your AI assistant. What can I help you with?" }]);
+    }, []);
+
+    const sendMessage = async () => {
+        if (!input.trim()) return;
+
+        const userMessage = { sender: "user", text: input };
+        setMessages((prev) => [...prev, userMessage]); // Add user message to chat
+
+        try {
+            const response = await axios.post("http://localhost:5000/chat_with_ai", {
+                message: input,
+            });
+
+            const aiMessage = { sender: "ai", text: response.data.reply };
+            setMessages((prev) => [...prev, aiMessage]); // Add AI response to chat
+        } catch (error) {
+            console.error("Error communicating with AI:", error);
         }
+
+        setInput(""); // Clear input field
     };
 
     return (
-        <div className="p-4 border rounded-lg shadow-lg w-full">
-            <h2 className="text-xl font-semibold mb-2">Chatbot</h2>
-            <div className="border p-2 h-40 overflow-y-auto mb-2">
+        <div className="chat-container">
+            <div className="chatbox">
                 {messages.map((msg, index) => (
-                    <p key={index} className={msg.sender === 'User' ? 'text-right' : 'text-left'}>
-                        <strong>{msg.sender}:</strong> {msg.text}
-                    </p>
+                    <div key={index} className={`message ${msg.sender}`}>
+                        {msg.text}
+                    </div>
                 ))}
             </div>
-            <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type a message..."
-                className="border p-2 rounded w-full mb-2"
-            />
-            <button onClick={sendMessage} className="bg-green-500 text-white px-4 py-2 rounded">
-                Send
-            </button>
+
+            <div className="input-container">
+                <input
+                    type="text"
+                    placeholder="Type a message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                />
+                <button onClick={sendMessage}>Send</button>
+            </div>
         </div>
     );
 };
 
-export default Chatbot;
+export default Chatbox;
