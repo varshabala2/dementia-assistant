@@ -13,13 +13,15 @@ CORS(app)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-#app routes
+# app routes
+
 
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "AI Companion Backend Running!"})
 
-#reminder routes
+# reminder routes
+
 
 @app.route("/set_reminder", methods=["POST"])
 def set_reminder():
@@ -27,9 +29,11 @@ def set_reminder():
     create_reminder(data["text"], data["time"])
     return jsonify({"message": "Reminder Set!"})
 
+
 @app.route("/get_reminders", methods=["GET"])
 def get_reminders():
     return jsonify(get_all_reminders())
+
 
 @app.route("/complete_reminder", methods=["POST"])
 def complete_reminder():
@@ -37,7 +41,8 @@ def complete_reminder():
     mark_reminder_completed(data["text"])
     return jsonify({"message": "Reminder Completed!"})
 
-#ai routes
+# ai routes
+
 
 @app.route("/chat_with_ai", methods=["POST"])
 def chat_with_ai():
@@ -52,3 +57,14 @@ def chat_with_ai():
     ai_response = response["choices"][0]["message"]["content"]
     return jsonify({"reply": ai_response})
 
+# Test route
+
+
+@app.route('/api/test', methods=['GET'])
+def test_connection():
+    return jsonify({"message": "Connection successful!"})
+
+
+# Run Flask app
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
+import TestConnection from './Testconnection';
+
 // import SetReminder from './SetReminder';
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
           Learn React
         </a>
         <p>Hello, World!</p> {/* Added this line */}
+        <TestConnection /> {/* Added this line */}
       </header>
     </div>
   );
